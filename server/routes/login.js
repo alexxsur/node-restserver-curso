@@ -36,15 +36,17 @@ app.post('/login', function(req, res) {
                 }
             });
 
-            let token = jwt.sign({
-                usuario: usuarioDB
-            }, 'este-es-el-seed-desarrollo', { expiresIn: 60 * 60 * 24 * 30 });
+
         }
+
+        let token = jwt.sign({
+            usuario: usuarioDB
+        }, process.env.SEED, { expiresIn: 60 * 60 * 24 * 30 });
 
         res.json({
             ok: true,
             usuario: usuarioDB,
-            token: '123'
+            token
         });
     });
 });
