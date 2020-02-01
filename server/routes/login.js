@@ -73,6 +73,7 @@ async function verify(token) {
     }
 }
 
+// Google Sign-In
 app.post('/google', async(req, res) => {
     let token = req.body.idtoken;
     let googleUser = await verify(token)
