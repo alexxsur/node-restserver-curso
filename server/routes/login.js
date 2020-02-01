@@ -90,7 +90,7 @@ app.post('/google', async(req, res) => {
                 ok: false,
                 err
             });
-        }
+        };
 
         if (usuarioDB) {
             if (usuarioDB.google === false) {
