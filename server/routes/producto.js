@@ -38,7 +38,7 @@ app.get('/producto', verificaToken, (req, res) => {
 });
 
 // ===================================
-// Mostrar una producto por ID
+// Mostrar un producto por ID
 // ===================================
 app.get('/producto/:id', verificaToken, (req, res) => {
 
@@ -72,7 +72,41 @@ app.get('/producto/:id', verificaToken, (req, res) => {
 });
 
 // ===================================
-// Eliminar una producto por ID
+// Buscar un producto por ID
+// ===================================
+app.get('/producto/buscar/:termino', verificaToken, (req, res) => {
+
+    let termino = req.params.termino;
+    let regex = new RegExp(termino, 'i');
+
+    Producto.find({ nombre: regex })
+        .populate('categoria', 'nombre')
+        .exec((err, productoDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            if (!productoDB) {
+                return res.status(400).json({
+                    ok: false,
+                    err: {
+                        message: 'El id no existe'
+                    }
+                });
+            }
+
+            res.json({
+                ok: true,
+                producto: productoDB
+            });
+        })
+});
+
+// ===================================
+// Eliminar un producto por ID
 // ===================================
 app.delete('/producto/:id', verificaToken, (req, res) => {
 
@@ -118,7 +152,7 @@ app.delete('/producto/:id', verificaToken, (req, res) => {
 });
 
 // ===================================
-// Actualizar una producto por ID
+// Actualizar un producto por ID
 // ===================================
 app.put('/producto/:id', verificaToken, (req, res) => {
 
