@@ -1,6 +1,8 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const Usuario = require('../models/usuario');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 // default options
@@ -75,6 +77,7 @@ function imagenUsuario(id, res, nombreArchivo) {
     Usuario.findById(id, (err, usuarioBD) => {
 
         if (err) {
+            borraArchivo(nombreArchivo, 'usuario');
             return res.status(500).json({
                 ok: false,
                 err
@@ -82,6 +85,7 @@ function imagenUsuario(id, res, nombreArchivo) {
         }
 
         if (!usuarioBD) {
+            borraArchivo(nombreArchivo, 'usuario');
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -89,6 +93,8 @@ function imagenUsuario(id, res, nombreArchivo) {
                 }
             });
         }
+
+        borraArchivo(usuarioBD.img, 'usuario');
 
         usuarioBD.img = nombreArchivo;
 
@@ -106,6 +112,13 @@ function imagenUsuario(id, res, nombreArchivo) {
 
 function imagenProducto() {
 
+}
+
+function borraArchivo(nombreImagen, tipo) {
+    let pathImagen = path.resolve(__dirname, `../../uploads/${tipo}/${nombreImagen}`);
+    if (fs.existsSync(pathImagen)) {
+        fs.unlinkSync(pathImagen);
+    }
 }
 
 module.exports = app;

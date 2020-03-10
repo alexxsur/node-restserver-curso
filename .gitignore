@@ -1,2 +1,4 @@
 node_modules/
 mongoinfo.txt
+uploads/producto/
+uploads/usuario/
